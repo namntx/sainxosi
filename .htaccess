@@ -13,3 +13,6 @@
     Require all granted
 </FilesMatch>
 
+# Set index.php as default page
+DirectoryIndex index.php index.html
+
