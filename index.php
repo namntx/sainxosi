@@ -363,8 +363,8 @@ $is_logged_in = isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_i
 
                     <form @submit.prevent="saveUser()" class="space-y-3">
                         <div class="grid grid-cols-1 lg:grid-cols-2 gap-3">
-                            <!-- User Selection from Firebase Auth -->
-                            <div x-show="!editingUser">
+                            <!-- User Selection from Firebase Auth (when available) -->
+                            <div x-show="!editingUser && authUsers.length > 0">
                                 <label class="block text-xs lg:text-sm font-medium text-gray-700 mb-1 lg:mb-2">
                                     Chọn User từ Firebase Auth *
                                 </label>
@@ -377,12 +377,30 @@ $is_logged_in = isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_i
                                         <option :value="authUser.uid" x-text="`${authUser.email} (${authUser.uid})`"></option>
                                     </template>
                                 </select>
-                                <p class="text-xs text-gray-500 mt-1" x-show="authUsers.length === 0 && !loadingAuthUsers">
-                                    <i class="fas fa-info-circle mr-1"></i>Chưa có user nào trong Firebase Auth
+                            </div>
+
+                            <!-- Manual User ID Input (when no Auth users or editing) -->
+                            <div x-show="!editingUser && authUsers.length === 0 && !loadingAuthUsers">
+                                <label class="block text-xs lg:text-sm font-medium text-gray-700 mb-1 lg:mb-2">
+                                    User ID *
+                                </label>
+                                <input type="text"
+                                       x-model="userForm.userId"
+                                       required
+                                       placeholder="Nhập User ID"
+                                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
+                                <p class="text-xs text-amber-600 mt-1">
+                                    <i class="fas fa-exclamation-triangle mr-1"></i>Firebase Auth không khả dụng. Nhập User ID thủ công.
                                 </p>
-                                <p class="text-xs text-blue-500 mt-1" x-show="loadingAuthUsers">
-                                    <i class="fas fa-spinner fa-spin mr-1"></i>Đang tải danh sách users...
-                                </p>
+                            </div>
+
+                            <!-- Loading state -->
+                            <div x-show="!editingUser && loadingAuthUsers">
+                                <label class="block text-xs lg:text-sm font-medium text-gray-700 mb-1 lg:mb-2">User ID</label>
+                                <div class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50 text-sm flex items-center">
+                                    <i class="fas fa-spinner fa-spin mr-2 text-blue-500"></i>
+                                    <span class="text-gray-500">Đang tải...</span>
+                                </div>
                             </div>
 
                             <!-- User ID (Read-only when editing) -->
@@ -395,7 +413,7 @@ $is_logged_in = isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_i
                             </div>
 
                             <!-- Selected User Email Display -->
-                            <div x-show="userForm.selectedEmail && !editingUser">
+                            <div x-show="userForm.selectedEmail && !editingUser && authUsers.length > 0">
                                 <label class="block text-xs lg:text-sm font-medium text-gray-700 mb-1 lg:mb-2">Email</label>
                                 <input type="text"
                                        :value="userForm.selectedEmail"
