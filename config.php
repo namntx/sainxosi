@@ -17,3 +17,7 @@ define('FIREBASE_SERVICE_ACCOUNT_PATH', __DIR__ . '/firebase-service-account.jso
 // Timezone
 date_default_timezone_set('Asia/Ho_Chi_Minh');
 
+// Admin Login Credentials
+define('ADMIN_USERNAME', 'admin');
+define('ADMIN_PASSWORD', 'admin123'); // Change this password!
+
