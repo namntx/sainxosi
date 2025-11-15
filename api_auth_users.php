@@ -4,6 +4,9 @@
  *
  * GET /api/api_auth_users.php - Get all Firebase Auth users
  * GET /api/api_auth_users.php?uid=xxx - Get specific user by UID
+ *
+ * Note: This endpoint returns an empty list if Firebase Admin SDK is not installed.
+ * To enable Firebase Auth integration, install: composer require kreait/firebase-php
  */
 
 header('Content-Type: application/json; charset=utf-8');
@@ -24,9 +27,12 @@ $useAdminSDK = file_exists(__DIR__ . '/vendor/autoload.php') &&
                file_exists(defined('FIREBASE_SERVICE_ACCOUNT_PATH') ? FIREBASE_SERVICE_ACCOUNT_PATH : __DIR__ . '/firebase-service-account.json');
 
 if (!$useAdminSDK) {
+    // Return empty list instead of error - graceful degradation
     echo json_encode([
-        'success' => false,
-        'error' => 'Firebase Admin SDK is required for this endpoint. Please install: composer require kreait/firebase-php'
+        'success' => true,
+        'users' => [],
+        'count' => 0,
+        'message' => 'Firebase Admin SDK not installed. To enable Firebase Auth integration, run: composer require kreait/firebase-php'
     ]);
     exit;
 }

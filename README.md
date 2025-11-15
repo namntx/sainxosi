@@ -89,6 +89,40 @@ Hoặc nếu chạy local:
 http://localhost/sainxosi/index.php
 ```
 
+### 4. Deployment trên aaPanel (Optional)
+
+Nếu bạn deploy trên aaPanel và muốn sử dụng Firebase Auth integration:
+
+#### Cài đặt Composer trên aaPanel:
+1. SSH vào server
+2. Cài đặt Composer:
+```bash
+cd ~
+curl -sS https://getcomposer.org/installer | php
+sudo mv composer.phar /usr/local/bin/composer
+```
+
+3. Verify cài đặt:
+```bash
+composer --version
+```
+
+#### Cài đặt Firebase Admin SDK:
+```bash
+cd /www/wwwroot/your-domain.com/api
+composer require kreait/firebase-php
+```
+
+#### Upload Service Account File:
+1. Tải Firebase service account JSON từ Firebase Console
+2. Upload vào `/www/wwwroot/your-domain.com/api/`
+3. Đảm bảo file được bảo vệ bởi `.htaccess`
+
+**Lưu ý**: Nếu không cài Composer, hệ thống vẫn hoạt động bình thường nhưng:
+- Không thể load danh sách users từ Firebase Auth
+- Phải nhập User ID thủ công khi thêm user
+- Email sẽ không hiển thị trong danh sách users
+
 ## Sử Dụng
 
 ### Giao Diện Web (index.php)
