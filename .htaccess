@@ -1,0 +1,15 @@
+# Protect firebase-service-account.json from public access
+<Files "firebase-service-account.json">
+    Require all denied
+</Files>
+
+# Protect config.php from public access
+<Files "config.php">
+    Require all denied
+</Files>
+
+# Allow API endpoints
+<FilesMatch "^(api_|index|lottery|users)\.php$">
+    Require all granted
+</FilesMatch>
+
